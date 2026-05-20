@@ -1,40 +1,19 @@
 package db
 
 import (
-	"database/sql"
 	"fmt"
-	"os"
 
-	_ "github.com/lib/pq"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+
+	"github.com/siriwatchin/jetson-connector/config"
 )
 
-func Connect() (*sql.DB, error) {
+func Connect(cfg config.Config) (*gorm.DB, error) {
 	dsn := fmt.Sprintf(
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
-		getenv("DB_HOST", "localhost"),
-		getenv("DB_PORT", "5432"),
-		getenv("DB_USER", "postgres"),
-		getenv("DB_PASSWORD", ""),
-		getenv("DB_NAME", "jetson"),
-		getenv("DB_SSLMODE", "disable"),
+		cfg.DBHost, cfg.DBPort, cfg.DBUser, cfg.DBPassword, cfg.DBName, cfg.DBSSLMode,
 	)
-	return sql.Open("postgres", dsn)
+	return gorm.Open(postgres.Open(dsn), &gorm.Config{})
 }
 
-func Migrate(db *sql.DB) error {
-	_, err := db.Exec(`
-		CREATE TABLE IF NOT EXISTS raw_data (
-			id         BIGSERIAL PRIMARY KEY,
-			payload    JSONB        NOT NULL,
-			created_at TIMESTAMPTZ  NOT NULL DEFAULT NOW()
-		)
-	`)
-	return err
-}
-
-func getenv(key, fallback string) string {
-	if v := os.Getenv(key); v != "" {
-		return v
-	}
-	return fallback
-}

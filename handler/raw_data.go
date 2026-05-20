@@ -12,7 +12,8 @@ import (
 )
 
 type RawDataHandler struct {
-	DB *gorm.DB
+	DB          *gorm.DB
+	EnableWrite bool
 }
 
 type rawDataRequest struct {
@@ -66,9 +67,11 @@ func (h *RawDataHandler) Create(c *gin.Context) {
 		BboxHeight:  &h2,
 	}
 
-	if err := h.DB.Create(&record).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "db error"})
-		return
+	if h.EnableWrite {
+		if err := h.DB.Create(&record).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "db error"})
+			return
+		}
 	}
 
 	c.JSON(http.StatusOK, gin.H{"status": "ok"})

@@ -10,16 +10,18 @@ type Config struct {
 	DBName     string
 	DBSSLMode  string
 	ServerPort string
+	EnableWrite bool
 }
 
 func Load() Config {
 	return Config{
-		DBHost:     os.Getenv("DB_HOST"),
-		DBPort:     os.Getenv("DB_PORT"),
-		DBUser:     os.Getenv("DB_USER"),
-		DBPassword: os.Getenv("DB_PASSWORD"),
-		DBName:     os.Getenv("DB_NAME"),
-		DBSSLMode:  os.Getenv("DB_SSLMODE"),
-		ServerPort: os.Getenv("SERVER_PORT"),
+		DBHost:      os.Getenv("DB_HOST"),
+		DBPort:      os.Getenv("DB_PORT"),
+		DBUser:      os.Getenv("DB_USER"),
+		DBPassword:  os.Getenv("DB_PASSWORD"),
+		DBName:      os.Getenv("DB_NAME"),
+		DBSSLMode:   os.Getenv("DB_SSLMODE"),
+		ServerPort:  os.Getenv("SERVER_PORT"),
+		EnableWrite: os.Getenv("ENABLE_WRITE") == "true",
 	}
 }

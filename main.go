@@ -21,7 +21,7 @@ func main() {
 	r := gin.New()
 	r.Use(gin.Recovery(), middleware.Logger())
 
-	rawData := &handler.RawDataHandler{DB: db}
+	rawData := &handler.RawDataHandler{DB: db, EnableWrite: cfg.EnableWrite}
 	v1 := r.Group("/api/v1")
 	{
 		v1.POST("/raw_data", rawData.Create)

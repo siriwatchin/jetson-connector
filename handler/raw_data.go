@@ -47,10 +47,14 @@ func (h *RawDataHandler) Create(c *gin.Context) {
 		return
 	}
 
-	trackID, err := uuid.Parse(req.Data.TrackID)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid track_id"})
-		return
+	trackID := uuid.Nil
+	if req.Data.TrackID != "" {
+		var err error
+		trackID, err = uuid.Parse(req.Data.TrackID)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid track_id"})
+			return
+		}
 	}
 
 	x, y, w, h2 := req.Data.X, req.Data.Y, req.Data.Width, req.Data.Height

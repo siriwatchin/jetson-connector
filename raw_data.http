@@ -1,0 +1,7 @@
+### Variables
+@baseUrl = http://127.0.0.1:8080
+
+POST {{baseUrl}}/api/v1/raw_data
+Content-Type: application/json
+
+{}

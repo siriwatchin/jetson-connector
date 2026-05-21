@@ -25,6 +25,7 @@ func main() {
 	v1 := r.Group("/api/v1")
 	{
 		v1.POST("/raw_data", rawData.Create)
+		v1.POST("/raw_data/batch", rawData.CreateBatch)
 	}
 
 	if err := r.Run(":" + cfg.ServerPort); err != nil {
